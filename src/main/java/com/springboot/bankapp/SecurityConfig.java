@@ -41,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		 .and()
 		 .httpBasic()
 		 .and()
-		 .csrf().disable(); 
+		 .csrf().disable();
 	}
 	
 	public DaoAuthenticationProvider  getDBAuthenticator(){
