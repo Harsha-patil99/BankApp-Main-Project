@@ -21,7 +21,7 @@ public class UserInfo {
 	@Column(nullable = false, unique = true)
 	private String password; 
 	
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.EAGER, cascade= CascadeType.ALL)
 	private Role role;
 
 	public Long getId() {

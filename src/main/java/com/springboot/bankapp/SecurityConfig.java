@@ -36,12 +36,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.authorizeRequests()
 		 .antMatchers("/customer").permitAll()
 		 .antMatchers("/user").authenticated()
+		 .antMatchers("/transfer").authenticated()
+		 .antMatchers("/statement/**/**").authenticated()
 		 .anyRequest()
 		 .permitAll()
 		 .and()
 		 .httpBasic()
 		 .and()
-		 .csrf().disable();
+		 .csrf().disable(); 
 	}
 	
 	public DaoAuthenticationProvider  getDBAuthenticator(){
