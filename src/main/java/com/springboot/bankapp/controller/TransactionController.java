@@ -17,11 +17,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.bankapp.dto.Transfer;
+import com.springboot.bankapp.model.Account;
+import com.springboot.bankapp.model.Help;
 import com.springboot.bankapp.model.Transaction;
 import com.springboot.bankapp.service.TransactionService;
 
 @RestController
 public class TransactionController {
+	
 
 	@Autowired
 	private TransactionService transactionService;
@@ -126,4 +129,68 @@ public class TransactionController {
 		
 		return list; 
 	}
+	
+		@PostMapping("/deposit/{amount}")
+		public Transaction doDeposit(Principal principal, @PathVariable("amount") double amount) {
+			/*
+			 * deposit
+			 * step-1:
+			 * fetch account number based on username
+			 * 
+			 * step-2:
+			 * update the balance of the user and add the amount to the balance
+			 * 
+			 * step-3:
+			 * add an entry in transaction table
+			 * operation type="DEPOSIT"
+			 * account_from = account_to = accountNumber
+			 */
+
+			//step 1:fetch account number based on username
+			String username=principal.getName();
+			String accountNumber = transactionService.fetchFromAccountNumber(username);
+			
+			//step-2:update the balance of the user and add the amount to the balance
+//			amount = transfer.getAmount();
+			transactionService.depositAmount(accountNumber, amount);
+			
+			//step-3:
+			Transaction transaction = new Transaction();
+			transaction.setAccountFrom(accountNumber);
+			transaction.setAccountTo(accountNumber);
+			transaction.setAmount(amount);
+			transaction.setOperationType("DEPOSIT");
+			transaction.setDateOfTransaction(new Date());
+			
+			return transactionService.saveTransaction(transaction);
+		}
+		
+		@GetMapping("/balance")
+		public double accountBalance(Principal principal){
+			/*
+			 * Balance Enquiry
+			 * 
+			 * step-1
+			 * fetch account number based on username
+			 */
+			
+			String username=principal.getName();
+			String accountNumber = transactionService.fetchFromAccountNumber(username);
+			
+			Account account = transactionService.getAccountByAccountNumber(accountNumber);
+			return account.getBalance();
+		} 
+		
+		@PostMapping("/help")
+		public Help postQueAns(@RequestBody Help help) {
+			return transactionService.postQueAns(help);
+		}
+		
+		@GetMapping("/help/{id}")
+		public Help getQueAns(@PathVariable("id") Long id) {
+			return transactionService.getQueAns(id);
+		}
+		
+		
+	
 }

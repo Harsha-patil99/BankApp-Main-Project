@@ -69,11 +69,23 @@ public class CustomerService {
 		 
 		return customerRepository.getById(id);
 	}
+	
+	public void updateCustomer(String address, String city,Long id) {
+		customerRepository.updateCustomer(address,city,id);
+		}
+		public Customer findByid(Long id) {
+			return customerRepository.getById(id);
+		}
 
 	public UserInfo getUserByName(String name) {
 		
 		return userRepository.findByUsername(name);
 	}
+
+//	public void getCustomer(String address, String city, Long id) {
+//		// TODO Auto-generated method stub
+//		customerRepository.getCustomer(address,city,id);
+//	}
 	
 	
 	
